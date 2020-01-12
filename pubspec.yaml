@@ -1,0 +1,28 @@
+name: bean_encry
+description: racehf_bean_sub_project
+version: 0.0.2
+author:
+homepage: www.shuttlecloud.cn
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  args: ^1.5.2
+  asn1lib: ^0.5.8
+  clock: ^1.0.1
+  collection: ^1.14.11
+  crypto: ^2.1.2
+  pointycastle: ^1.0.1
+
+executables:
+  secure-random:
+
+flutter:
+
