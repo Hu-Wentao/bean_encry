@@ -13,7 +13,7 @@ class Encrypter {
     return algo.beanEncrypt(Uint8List.fromList(input), iv: iv);
   }
 
-  Encrypted encrypt(String input, {IV iv}) {
+  Encrypted enc(String input, {IV iv}) {
     return encryptBytes(convert.utf8.encode(input), iv: iv);
   }
 

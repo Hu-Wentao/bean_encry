@@ -29,10 +29,9 @@ part 'src/secure_random.dart';
 part 'src/signer.dart';
 
 class BeanEncrypt {
-  static List<int> getResult(
-          List<int> needEncrypt, List<int> id, int lastPowerOffUtcSec) =>
+  static List<int> getResult(List<int> content, List<int> id, int sec) =>
       encryptToList(
-          needEncrypt,
+          content,
           '1024' +
               (id.reduce((v, e) => v + e) % 256)
                   .toRadixString(16)
@@ -40,7 +39,7 @@ class BeanEncrypt {
               (([0] + id).reduce((v, e) => v - e) % 256)
                   .toRadixString(16)
                   .toUpperCase() +
-              getTimestampLast(lastPowerOffUtcSec));
+              getTimestampLast(sec));
 
   static String getTimestampLast(int utcSecond) {
     final d = DateTime.fromMillisecondsSinceEpoch(utcSecond * 1000).toUtc();
@@ -50,18 +49,15 @@ class BeanEncrypt {
   }
 
   static List<int> encryptToList(List<int> c, String key) {
-    return Encrypter(AES(Key.fromUtf8(_addPadAndCut(key)),
-            mode: AESMode.ecb))
-        .encrypt(
-            _addPad(c.map((v) => v.toRadixString(16).padLeft(2, '0')).join('')))
+    return Encrypter(AES(Key.fromUtf8(_padC(key)), mode: AESMode.ecb))
+        .enc(_pad(c.map((v) => v.toRadixString(16).padLeft(2, '0')).join('')))
         .bytes
         .toList();
   }
 
-  static String _addPad(String s) => s += s.length % 16 != 0
+  static String _pad(String s) => s += s.length % 16 != 0
       ? String.fromCharCodes(List.generate(16 - s.length % 16, (_) => 0x00))
       : '';
 
-  static String _addPadAndCut(String s) =>
-      s.length > 16 ? s.substring(0, 16) : _addPad(s);
+  static String _padC(String s) => s.length > 16 ? s.substring(0, 16) : _pad(s);
 }
